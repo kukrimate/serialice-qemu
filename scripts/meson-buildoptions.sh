@@ -175,6 +175,7 @@ meson_options_help() {
   printf "%s\n" '  sdl-image       SDL Image support for icons'
   printf "%s\n" '  seccomp         seccomp support'
   printf "%s\n" '  selinux         SELinux support in qemu-nbd'
+  printf "%s\n" '  serialice       SerialICE debugger support'
   printf "%s\n" '  slirp           libslirp user mode network backend support'
   printf "%s\n" '  slirp-smbd      use smbd (at path --smbd=*) in slirp networking'
   printf "%s\n" '  smartcard       CA smartcard emulation support'
@@ -467,6 +468,8 @@ _meson_option_parse() {
     --disable-seccomp) printf "%s" -Dseccomp=disabled ;;
     --enable-selinux) printf "%s" -Dselinux=enabled ;;
     --disable-selinux) printf "%s" -Dselinux=disabled ;;
+    --enable-serialice) printf "%s" -Dserialice=enabled ;;
+    --disable-serialice) printf "%s" -Dserialice=disabled ;;
     --enable-slirp) printf "%s" -Dslirp=enabled ;;
     --disable-slirp) printf "%s" -Dslirp=disabled ;;
     --enable-slirp-smbd) printf "%s" -Dslirp_smbd=enabled ;;

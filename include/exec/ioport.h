@@ -47,9 +47,11 @@ extern const MemoryRegionOps unassigned_io_ops;
 void cpu_outb(uint32_t addr, uint8_t val);
 void cpu_outw(uint32_t addr, uint16_t val);
 void cpu_outl(uint32_t addr, uint32_t val);
+void cpu_io_write_wrapper(uint16_t port, unsigned int size, uint32_t data);
 uint8_t cpu_inb(uint32_t addr);
 uint16_t cpu_inw(uint32_t addr);
 uint32_t cpu_inl(uint32_t addr);
+uint32_t cpu_io_read_wrapper(uint16_t port, unsigned int size);
 
 typedef struct PortioList {
     const struct MemoryRegionPortio *ports;

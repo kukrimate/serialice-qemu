@@ -27,6 +27,7 @@
 #include "qapi/qapi-types-common.h"
 #include "qemu/cpu-float.h"
 #include "qemu/timer.h"
+#include "serialice.h"
 
 #define XEN_NR_VIRQS 24
 
@@ -2548,5 +2549,9 @@ static inline bool ctl_has_irq(CPUX86State *env)
     defined(CONFIG_LINUX)
 # define TARGET_VSYSCALL_PAGE  (UINT64_C(-10) << 20)
 #endif
+
+void cpu_wrmsr(CPUX86State *env, uint64_t val, uint32_t addr);
+uint64_t cpu_rdmsr(CPUX86State *env, uint32_t addr);
+cpuid_regs_t cpu_cpuid(CPUX86State *env, uint32_t in_eax, uint32_t in_ecx);
 
 #endif /* I386_CPU_H */

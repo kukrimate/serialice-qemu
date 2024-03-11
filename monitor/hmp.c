@@ -48,6 +48,45 @@ static void monitor_command_cb(void *opaque, const char *cmdline,
     monitor_resume(&mon->common);
 }
 
+extern int serialice_active;
+const char *serialice_lua_execute(const char *cmd);
+void do_lua(Monitor *mon_, const QDict *qdict);
+
+// #ifdef CONFIG_SERIALICE
+static void monitor_command_lua(void *opaque, const char *cmdline,
+		void *readline_opaque)
+{
+    char *errmsg;
+    Monitor *mon_ = opaque;
+    MonitorHMP *mon = container_of(mon_, MonitorHMP, common);
+
+    if (!strncasecmp("quit", cmdline, 5)) {
+        monitor_printf(mon_, "Exited LUA shell.\n");
+    	readline_start(mon->rs, "(qemu) ", 0, monitor_command_cb, NULL);
+        readline_show_prompt(mon->rs);
+        return;
+    }
+
+    errmsg = (char *)serialice_lua_execute(cmdline);
+    if(errmsg) {
+        monitor_printf(mon_, "Lua error: %s\n", errmsg);
+        free (errmsg);
+    }
+
+    readline_show_prompt(mon->rs);
+}
+
+void do_lua(Monitor *mon_, const QDict *qdict)
+{
+    MonitorHMP *mon = container_of(mon_, MonitorHMP, common);
+    if (serialice_active) {
+        readline_start(mon->rs, "(lua) ", 0, monitor_command_lua, NULL);
+    } else {
+        monitor_printf(mon_, "SerialICE is not active.\n");
+    }
+}
+// #endif
+
 void monitor_read_command(MonitorHMP *mon, int show_prompt)
 {
     if (!mon->rs) {

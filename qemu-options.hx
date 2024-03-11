@@ -5853,6 +5853,14 @@ SRST
             (qemu) qom-set /objects/iothread1 poll-max-ns 100000
 ERST
 
+DEF("serialice", HAS_ARG, QEMU_OPTION_serialice,
+    "-serialice dev  Enable SerialICE debugging on serial device 'dev'\n",
+    QEMU_ARCH_ALL)
+SRST
+``-serialice dev``
+  Enable SerialICE debugging on serial device dev.
+ERST
+
 
 HXCOMM This is the last statement. Insert new options before this line!
 

@@ -497,4 +497,7 @@ bool qemu_console_fill_device_address(QemuConsole *con,
                                       size_t size,
                                       Error **errp);
 
+/* dumb_screen.c */
+void dumb_screen(void);
+
 #endif

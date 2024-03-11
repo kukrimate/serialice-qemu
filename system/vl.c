@@ -183,6 +183,8 @@ static const char *qtest_chrdev;
 static const char *qtest_log;
 static bool opt_one_insn_per_tb;
 
+extern const char *serialice_device;
+
 static int has_defaults = 1;
 static int default_audio = 1;
 static int default_serial = 1;
@@ -2895,6 +2897,11 @@ void qemu_init(int argc, char **argv)
                 nographic = true;
                 dpy.type = DISPLAY_TYPE_NONE;
                 break;
+// #ifdef CONFIG_SERIALICE
+            case QEMU_OPTION_serialice:
+                serialice_device = optarg;
+                break;
+// #endif
             case QEMU_OPTION_portrait:
                 graphic_rotate = 90;
                 break;

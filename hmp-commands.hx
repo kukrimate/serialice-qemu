@@ -298,6 +298,20 @@ SRST
   changes status of a trace event
 ERST
 
+#ifdef CONFIG_SERIALICE
+    {
+        .name       = "lua",
+        .args_type  = "",
+        .params     = "",
+        .help       = "go to lua shell",
+        .cmd	    = do_lua,
+    },
+#endif
+SRST
+``lua``
+  go to lua shell.
+ERST
+
 #if defined(CONFIG_TRACE_SIMPLE)
     {
         .name       = "trace-file",

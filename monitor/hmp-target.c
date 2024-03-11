@@ -41,6 +41,8 @@
 #include "hw/s390x/storage-attributes.h"
 #endif
 
+#include "serialice.h"
+
 /* Make devices configuration available for use in hmp-commands*.hx templates */
 #include CONFIG_DEVICES
 
@@ -68,6 +70,8 @@ int hmp_compare_cmd(const char *name, const char *list)
     }
     return 0;
 }
+
+void do_lua(Monitor *mon_, const QDict *qdict);
 
 /* Please update hmp-commands.hx when adding or changing commands */
 static HMPCommand hmp_info_cmds[] = {

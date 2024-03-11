@@ -47,18 +47,35 @@ void helper_into(CPUX86State *env, int next_eip_addend)
     }
 }
 
+cpuid_regs_t cpu_cpuid(CPUX86State *env, uint32_t in_eax, uint32_t in_ecx)
+{
+    cpuid_regs_t ret;
+
+    cpu_x86_cpuid(env, in_eax, in_ecx, &ret.eax, &ret.ebx, &ret.ecx, &ret.edx);
+
+    return ret;
+}
+
 void helper_cpuid(CPUX86State *env)
 {
-    uint32_t eax, ebx, ecx, edx;
+    cpuid_regs_t ret;
 
     cpu_svm_check_intercept_param(env, SVM_EXIT_CPUID, 0, GETPC());
 
+#ifdef CONFIG_SERIALICE
+    if (serialice_active)
+        ret = serialice_cpuid(env, (uint32_t)env->regs[R_EAX], (uint32_t)env->regs[R_ECX]);
+    else
+        ret = cpu_cpuid(env, (uint32_t)env->regs[R_EAX], (uint32_t)env->regs[R_ECX]);
+#else
     cpu_x86_cpuid(env, (uint32_t)env->regs[R_EAX], (uint32_t)env->regs[R_ECX],
-                  &eax, &ebx, &ecx, &edx);
-    env->regs[R_EAX] = eax;
-    env->regs[R_EBX] = ebx;
-    env->regs[R_ECX] = ecx;
-    env->regs[R_EDX] = edx;
+                  &ret.eax, &ret.ebx, &ret.ecx, &ret.edx);
+#endif
+
+    env->regs[R_EAX] = ret.eax;
+    env->regs[R_EBX] = ret.ebx;
+    env->regs[R_ECX] = ret.ecx;
+    env->regs[R_EDX] = ret.edx;
 }
 
 void helper_rdtsc(CPUX86State *env)

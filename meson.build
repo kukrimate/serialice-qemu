@@ -3074,6 +3074,10 @@ genh += custom_target('config-poison.h',
 # Submodules #
 ##############
 
+lua53 = dependency('lua-5.3',
+                       method: 'pkg-config',
+                       required: true)
+
 capstone = not_found
 if not get_option('capstone').auto() or have_system or have_user
   capstone = dependency('capstone', version: '>=3.0.5',
@@ -3524,6 +3528,7 @@ specific_ss.add_all(when: 'CONFIG_TCG_BUILTIN', if_true: tcg_module_ss)
 target_modules += { 'accel' : { 'qtest': qtest_module_ss,
                                 'tcg': tcg_real_module_ss }}
 
+subdir('serialice')
 ########################
 # Library dependencies #
 ########################
@@ -3839,10 +3844,10 @@ foreach target : target_dirs
 
   lib = static_library('qemu-' + target,
                  sources: arch_srcs + genh,
-                 dependencies: arch_deps,
+                 dependencies: arch_deps + [lua53],
                  objects: objects,
                  include_directories: target_inc,
-                 c_args: c_args,
+                 c_args: c_args + ['-DCONFIG_SERIALICE=1'],
                  build_by_default: false,
                  name_suffix: 'fa')
 
@@ -3886,8 +3891,8 @@ foreach target : target_dirs
 
     emulator = executable(exe_name, exe['sources'],
                install: true,
-               c_args: c_args,
-               dependencies: arch_deps + deps + exe['dependencies'],
+               c_args: c_args  + ['-DCONFIG_SERIALICE=1'],
+               dependencies: arch_deps + deps + exe['dependencies'] + [lua53],
                objects: lib.extract_all_objects(recursive: true),
                link_depends: [block_syms, qemu_syms] + exe.get('link_depends', []),
                link_args: link_args,
